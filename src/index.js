@@ -14,7 +14,6 @@ function getRamenMenu(){
         addMenuListener()
         showRamenDetail(ramens[0])
     })
-    
 }
 
 function addRamenToMenu(ramen) {
@@ -29,7 +28,7 @@ function showRamenDetail(ramen){
     detail.querySelector("h2.name").textContent = ramen.name
     detail.querySelector("h3.restaurant").textContent = ramen.restaurant
     form.querySelector("input#rating").value = ramen.rating
-    form.querySelector("textarea#comment").innerText = ramen.comment
+    form.querySelector("textarea#comment").value = ramen.comment
     form.dataset.id = ramen.id
 }
 
@@ -45,7 +44,6 @@ function addMenuListener(){
 
     form.addEventListener('submit', event => {
         event.preventDefault()
-        console.log(event.target.comment.value)
         const id = event.target.dataset.id
         fetch(`${url}/${id}`, {
             method: 'PATCH',
@@ -74,16 +72,18 @@ function addMenuListener(){
     })
 
     deleteBtn.addEventListener('click', event => {
-        event.preventDefault()
+        // event.preventDefault()
         const id = event.target.parentElement.dataset.id
         fetch(`${url}/${id}`, {
             method: "DELETE"
         })
         .then(response => response.json())
-        .then()
-
+        .then(() => {
+            menu.innerHTML = ""
+            getRamenMenu()
+        })
     })
-    
+
 }
 
 getRamenMenu()
