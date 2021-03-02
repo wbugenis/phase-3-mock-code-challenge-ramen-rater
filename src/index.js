@@ -57,11 +57,11 @@ function addMenuListener(){
         .then(ramen => showRamenDetail(ramen))
     })
 
-    newForm.addEventListener('submit', event1 => {
-        event1.preventDefault()
-        const newRamen = {name: event1.target.name.value, restaurant: event1.target.restaurant.value,
-                            image: event1.target.image.value, comment: event1.target.newcomment.value,
-                            rating: event1.target.rating.value}
+    newForm.addEventListener('submit', event => {
+        event.preventDefault()
+        const newRamen = {name: event.target.name.value, restaurant: event.target.restaurant.value,
+                            image: event.target.image.value, comment: event.target.newcomment.value,
+                            rating: event.target.rating.value}
         fetch(url, 
             {method: 'POST', 
             headers: {'Content-Type': 'application/json', 'Accept': 'application/json'},
@@ -69,6 +69,7 @@ function addMenuListener(){
         })   
         .then(response => response.json())
         .then(newRamen => addRamenToMenu(newRamen))
+        newForm.reset()
     })
 
     deleteBtn.addEventListener('click', event => {
