@@ -3,7 +3,8 @@ const menu = document.querySelector("div#ramen-menu")
 const detail = document.querySelector("div#ramen-detail")
 const form = document.querySelector("form#ramen-rating")
 const url = "http://localhost:3000/ramens"
-
+const newForm = document.querySelector("form#new-ramen")
+const deleteBtn = form.querySelector("button#deletebutton")
 
 function getRamenMenu(){
     fetch(url)
@@ -11,7 +12,9 @@ function getRamenMenu(){
     .then(ramens => {
         ramens.forEach(ramen => addRamenToMenu(ramen))
         addMenuListener()
+        showRamenDetail(ramens[0])
     })
+    
 }
 
 function addRamenToMenu(ramen) {
@@ -42,6 +45,7 @@ function addMenuListener(){
 
     form.addEventListener('submit', event => {
         event.preventDefault()
+        console.log(event.target.comment.value)
         const id = event.target.dataset.id
         fetch(`${url}/${id}`, {
             method: 'PATCH',
@@ -54,6 +58,32 @@ function addMenuListener(){
         .then(response => response.json())
         .then(ramen => showRamenDetail(ramen))
     })
+
+    newForm.addEventListener('submit', event1 => {
+        event1.preventDefault()
+        const newRamen = {name: event1.target.name.value, restaurant: event1.target.restaurant.value,
+                            image: event1.target.image.value, comment: event1.target.newcomment.value,
+                            rating: event1.target.rating.value}
+        fetch(url, 
+            {method: 'POST', 
+            headers: {'Content-Type': 'application/json', 'Accept': 'application/json'},
+            body: JSON.stringify(newRamen)  
+        })   
+        .then(response => response.json())
+        .then(newRamen => addRamenToMenu(newRamen))
+    })
+
+    deleteBtn.addEventListener('click', event => {
+        event.preventDefault()
+        const id = event.target.parentElement.dataset.id
+        fetch(`${url}/${id}`, {
+            method: "DELETE"
+        })
+        .then(response => response.json())
+        .then()
+
+    })
+    
 }
 
 getRamenMenu()
